@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+</html>
+    <head>
+        <script type="text/javascript" src="/../js/all.js"></script>
+        </head>
+    <body>
+         <button onClick="addUser();">+ Add</button>
+            <table border="1" >
+                <tr>
+                    <th>No</th>
+                    <th>FirstName</th>
+                    <th>LastName</th>
+                    <th>Email</th>
+                    <th>Id</th>
+                    <th>Action</th>
+                </tr>
+                               
+                <% if(data.length){ 
+                                
+                 for(var i = 0;i < data.length;i++) { %>
+                 
+                <tr>
+                    <td><%=(i+1)%></td>
+                    <td><%=data[i].firstname%></td>
+                    <td><%=data[i].lastname%></td>
+                    <td><%=data[i].email%></td>
+                    <td><%=data[i].id%></td>
+                    <td>
+                        <a class="a-inside edit" href="../users/edit/<%=data[i].id%>">Edit</a>
+                       
+                        <a class="a-inside delete" href="../users/delete/<%=data[i].id%>">Delete</a>
+                       
+                    </td>
+                </tr>
+            <% }
+            
+             }else{ %>
+                 <tr>
+                    <td colspan="3">No user</td>
+                 </tr>
+            <% } %>
+             </table>
+        </body>
+</html>
