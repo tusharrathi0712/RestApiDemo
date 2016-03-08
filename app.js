@@ -54,12 +54,12 @@ app.use(
 
 
 app.get('/', routes.index);
-app.get('/users', rest.list);
+app.get('/users', rest.get);
 app.get('/users/add', rest.add);
-app.post('/users/add', rest.save);
+app.post('/users/add', rest.post);
 app.get('/users/delete/:id', rest.delete_user);
 app.get('/users/edit/:id', rest.edit);
-app.post('/users/edit/:id',rest.save_edit);
+app.post('/users/edit/:id',rest.put);
 app.use(app.router);
 
 http.createServer(app).listen(app.get('port'), function(){
