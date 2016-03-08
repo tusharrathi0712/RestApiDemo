@@ -44,7 +44,7 @@ app.use(
         port : 3306, //port mysql
         database:'dheeraj'
 
-    }) //or single
+    }) 
 
 );
 
