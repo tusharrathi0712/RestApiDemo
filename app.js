@@ -32,10 +32,7 @@ if ('development' == app.get('env')) {
   app.use(express.errorHandler());
 }
 
-/*------------------------------------------
-    connection peer, register as middleware
-    type koneksi : single,pool and request 
--------------------------------------------*/
+
 
 app.use(
     
@@ -47,7 +44,7 @@ app.use(
         port : 3306, //port mysql
         database:'dheeraj'
 
-    },'pool') //or single
+    }) //or single
 
 );
 
