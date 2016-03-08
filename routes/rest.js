@@ -3,7 +3,7 @@ var express = require('express');
 var route = express();
 
 //get list of users
-route.list = function(req, res){
+route.get = function(req, res){
 
   req.getConnection(function(err,connection){
        
@@ -33,7 +33,7 @@ route.add = function(req, res){
 
 
 
-/*edit the user*/
+
 route.edit = function(req, res){
       var id = req.params.id;
        req.getConnection(function(err,connection){
@@ -57,7 +57,7 @@ route.edit = function(req, res){
 
 
 /*Add the User*/
-route.save = function(req,res){
+route.post = function(req,res){
     
     var input = JSON.parse(JSON.stringify(req.body));
     
@@ -99,7 +99,7 @@ route.save = function(req,res){
 
 
 /*Update the User*/
-route.save_edit = function(req,res){
+route.put = function(req,res){
     
     var input = JSON.parse(JSON.stringify(req.body));
     var id = req.params.id;
