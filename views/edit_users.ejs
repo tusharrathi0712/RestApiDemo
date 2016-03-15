@@ -4,22 +4,22 @@
         <script type="text/javascript" src="/../js/all.js"></script>
     </head>
     <body>
-            <form method="post" action="/users/edit/<%=data[0].id%>">
+            <form method="post" action="/users/edit%>">
                 <table cellpadding="11">
                 <tr>
-                    <td class="label">FirstName</td><td>: <input type="text" name="firstname" value="<%=data[0].firstname%>" required></td>
+                    <td>FirstName</td><td>: <input type="text" name="firstname" value="<%=data.user[0].firstname%>" required></td>
                  </tr>
                  <tr>
-                   <td class="label">LastName</td><td>: <input type="text" name="lastname" value="<%=data[0].lastname%>" required></td>
+                   <td>LastName</td><td>: <input type="text" name="lastname" value="<%=data.user[0].lastname%>" required></td>
                 </tr>
                 <tr>
-                    <td class="label">Email</td><td>: <input type="text" value="<%=data[0].email%>" name="email" required></td>
+                    <td>Email</td><td>: <input type="text" value="<%=data.user[0].email%>" name="email" required></td>
                  </tr>
                   <tr>
-                    <td class="label">Id</td><td>: <input type="text" name="id" value="<%=data[0].id%>" required></td>
+                    <td>Id</td><td>: <input type="text" name="id" value="<%=data.user[0].id%>" readonly></td>
                  </tr>
                  <tr>
-                    <td class="label"></td>
+                    <td></td>
                     <td>
                         <input type="submit" name="submit" value="Save">
                        <input type="button" name="cancel" value="Cancel" class="cancel" onClick="cancelAdd()">
