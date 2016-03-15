@@ -1,64 +1,157 @@
-
-/**
- * Module dependencies.
- */
-
 var express = require('express');
-var routes = require('./routes');
-var http = require('http');
 var path = require('path');
-
-//load customers route
-var rest = require('./routes/rest'); 
+var bodyParser = require('body-parser');
+var http = require('http');
 var app = express();
+var request = require('request');
 
-var connection  = require('express-myconnection'); 
-var mysql = require('mysql');
-
-// all environments
-app.set('port', process.env.PORT || 5300);
+//view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
-//app.use(express.favicon());
-app.use(express.logger('dev'));
-app.use(express.json());
-app.use(express.urlencoded());
-app.use(express.methodOverride());
 
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({
+	extended : false
+}));
 
-// development only
-if ('development' == app.get('env')) {
-  app.use(express.errorHandler());
-}
+//GET ALL USERS
+app.get('/users', function(req, res) {
 
-
-
-app.use(
-    
-    connection(mysql,{
-        
-        host: 'localhost',
-        user: 'root',
-        password : 'root',
-        port : 3306, //port mysql
-        database:'dheeraj'
-
-    }) 
-
-);
-
-
-
-app.get('/', routes.index);
-app.get('/users', rest.get);
-app.get('/users/add', rest.add);
-app.post('/users/add', rest.post);
-app.get('/users/delete/:id', rest.delete_user);
-app.get('/users/edit/:id', rest.edit);
-app.post('/users/edit/:id',rest.put);
-app.use(app.router);
-
-http.createServer(app).listen(app.get('port'), function(){
-  console.log('Express server listening on port ' + app.get('port'));
+	var options = {
+			host : 'localhost',
+			port : 3000,
+			path : '/users',
+			method : 'GET',
+	};
+	// HTTP GET request
+	var reqGet = http.request(options, function(response) {
+		response.on('data', function(data) {
+			var user = JSON.parse(data);
+			res.render('users', {data : user});
+			console.log(user.status);
+			if (user.status === "200") {
+				res.render('users', {data : user});
+			} else {
+				res.render('try', {data : user});
+			}
+		});
+	});
+	reqGet.end();
+	reqGet.on('error', function(e) {
+		console.error(e);
+	});
 });
+
+//DELETE USER BY ID
+app.get('/users/delete/:id', function(req, res) {
+
+	var id = req.params.id;
+	var options = {
+			host : 'localhost',
+			port : 3000,
+			path : '/users/' + id,
+			method : 'DELETE',
+	};
+	// HTTP GET request
+	var reqGet = http.request(options, function(response) {
+		response.on('data', function(data) {
+			// var user = JSON.parse(data);
+			// res.render('try', { data: user });
+			res.redirect('/users');
+		});
+	});
+	reqGet.end();
+	reqGet.on('error', function(e) {
+		console.error(e);
+	});
+});
+
+//ADD USER PAGE
+app.get('/users/add', function(req, res) {
+	res.render('add_users');
+});
+
+//INSERTING NEW USER
+app.post('/users/add', function(req, res) {
+	var post_data = {
+			firstname : req.body.firstname,
+			lastname : req.body.lastname,
+			email : req.body.email,
+			id : req.body.id
+	};
+
+	var db = JSON.stringify(post_data);
+
+	request.post({
+		headers : {
+			'content-type' : 'application/json'
+		},
+		url : 'http://localhost:3000/users',
+		body : db
+	}, function(error, response, res_body) {
+		console.log(res_body);
+		var user = JSON.parse(res_body);
+		console.log(user.status);
+		if (user.status === "200"||user.status==="201") {
+			res.redirect('/users');
+		} else {
+			res.render('try', {data : user});
+		}
+	});
+});
+
+//GET USER BY ID
+app.get('/users/edit/:id', function(req, res) {
+
+	var id = req.params.id;
+	var options = {
+			host : 'localhost',
+			port : 3000,
+			path : '/users/' + id,
+			method : 'GET',
+	};
+	// HTTP GET request
+	var reqGet = http.request(options, function(response) {
+		response.on('data', function(data) {
+			var user = JSON.parse(data);
+			res.render('edit_users', {
+				data : user
+			});
+		});
+	});
+	reqGet.end();
+	reqGet.on('error', function(e) {
+		console.error(e);
+	});
+});
+
+//UPDATE USER
+app.post('/users/edit', function(req, res) {
+	var post_data = {
+			firstname : req.body.firstname,
+			lastname : req.body.lastname,
+			email : req.body.email,
+			id : req.body.id
+	};
+
+	var db = JSON.stringify(post_data);
+
+	request.put({
+		headers : {
+			'content-type' : 'application/json'
+		},
+		url : 'http://localhost:3000/users',
+		body : db
+	}, function(error, response, res_body) {
+		var user = JSON.parse(res_body);
+		console.log(user.status);
+		if (user.status === "200"||user.status==="201") {
+			res.redirect('/users');
+		} else {
+			res.render('try', {data : user});
+		}
+
+	});
+});
+
+module.exports = app;
