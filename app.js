@@ -27,18 +27,27 @@ app.get('/users', function(req, res) {
 	var reqGet = http.request(options, function(response) {
 		response.on('data', function(data) {
 			var user = JSON.parse(data);
-			//res.render('users', {data : user});
-			
+			// res.render('users', {data : user});
+
 			if (user.status === 200) {
-				res.render('users', {data : user});
+				res.render('users', {
+					data : user
+				});
 			} else {
-				res.render('try', {data : user});
+				res.render('try', {
+					data : user
+				});
 			}
 		});
 	});
 	reqGet.end();
 	reqGet.on('error', function(e) {
-		console.error(e);
+		// console.error(e);
+		res.render('try', {
+			data : {
+				user : "API Server not available......"
+			}
+		});
 	});
 });
 
@@ -62,7 +71,12 @@ app.get('/users/delete/:id', function(req, res) {
 	});
 	reqGet.end();
 	reqGet.on('error', function(e) {
-		console.error(e);
+		// console.error(e);
+		res.render('try', {
+			data : {
+				user : "API Server not available......"
+			}
+		});
 	});
 });
 
@@ -89,15 +103,18 @@ app.post('/users/add', function(req, res) {
 		url : 'http://localhost:3000/users',
 		body : db
 	}, function(error, response, res_body) {
-		console.log(res_body);
+
 		var user = JSON.parse(res_body);
-		console.log(user.status);
-		if (user.status === "200"||user.status==="201") {
+
+		if (user.status === "200" || user.status === "201") {
 			res.redirect('/users');
 		} else {
-			res.render('try', {data : user});
+			res.render('try', {
+				data : user
+			});
 		}
 	});
+
 });
 
 //GET USER BY ID
@@ -121,7 +138,12 @@ app.get('/users/edit/:id', function(req, res) {
 	});
 	reqGet.end();
 	reqGet.on('error', function(e) {
-		console.error(e);
+		// console.error(e);
+		res.render('try', {
+			data : {
+				user : "API Server not available......"
+			}
+		});
 	});
 });
 
@@ -145,10 +167,12 @@ app.post('/users/edit', function(req, res) {
 	}, function(error, response, res_body) {
 		var user = JSON.parse(res_body);
 		console.log(user.status);
-		if (user.status === "200"||user.status==="201") {
+		if (user.status === "200" || user.status === "201") {
 			res.redirect('/users');
 		} else {
-			res.render('try', {data : user});
+			res.render('try', {
+				data : user
+			});
 		}
 
 	});
