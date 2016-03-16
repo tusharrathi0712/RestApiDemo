@@ -27,9 +27,9 @@ app.get('/users', function(req, res) {
 	var reqGet = http.request(options, function(response) {
 		response.on('data', function(data) {
 			var user = JSON.parse(data);
-			res.render('users', {data : user});
-			console.log(user.status);
-			if (user.status === "200") {
+			//res.render('users', {data : user});
+			
+			if (user.status === 200) {
 				res.render('users', {data : user});
 			} else {
 				res.render('try', {data : user});
